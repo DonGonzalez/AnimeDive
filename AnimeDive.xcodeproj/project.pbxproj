@@ -16,6 +16,7 @@
 		A1A0884C28676F62003295C7 /* AnimeDiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A0884B28676F62003295C7 /* AnimeDiveUITests.swift */; };
 		A1A0884E28676F62003295C7 /* AnimeDiveUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A0884D28676F62003295C7 /* AnimeDiveUITestsLaunchTests.swift */; };
 		A1A0885B28677303003295C7 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A0885A28677303003295C7 /* ViewModel.swift */; };
+		A1A0885E28846075003295C7 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A0885D28846075003295C7 /* Service.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		A1A0884B28676F62003295C7 /* AnimeDiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeDiveUITests.swift; sourceTree = "<group>"; };
 		A1A0884D28676F62003295C7 /* AnimeDiveUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeDiveUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A1A0885A28677303003295C7 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		A1A0885D28846075003295C7 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				A1A0885A28677303003295C7 /* ViewModel.swift */,
 				A1A0883528676F62003295C7 /* LaunchScreen.storyboard */,
 				A1A0883828676F62003295C7 /* Info.plist */,
+				A1A0885D28846075003295C7 /* Service.swift */,
 			);
 			path = AnimeDive;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 			files = (
 				A1A0882F28676F5F003295C7 /* ViewController.swift in Sources */,
 				A1A0882B28676F5F003295C7 /* AppDelegate.swift in Sources */,
+				A1A0885E28846075003295C7 /* Service.swift in Sources */,
 				A1A0885B28677303003295C7 /* ViewModel.swift in Sources */,
 				A1A0882D28676F5F003295C7 /* SceneDelegate.swift in Sources */,
 			);
