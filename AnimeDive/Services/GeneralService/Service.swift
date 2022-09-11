@@ -8,136 +8,40 @@
 import Foundation
 import UIKit
 
-class Service {
-    enum HTTPStatusCode: Int, Error {
-        case OK = 200
-        case Created = 201
-        case No_Content = 204
-        case Bad_Request = 400
-        case Unauthorized = 401
-        case Not_Found = 404
-        case Not_Acceptable = 406
-        case Server_Error = 500
-    }
-    
-    enum ErrorFetch: Error {
-    case invalidURL
-    case unknown
-    }
-    func getDatas(completion: @escaping (Result<Service.Data, Error>) -> Void) throws {
-       
-        guard  let url = URL(string: "https://kitsu.io/api/edge/anime?") else {
-            throw ErrorFetch.invalidURL
-        }
-        
-      let task =  URLSession.shared.dataTask(with: url) {Data, Response , Error in
-         
-          var statusCode: Int
-          
-          if let response = Response as? HTTPURLResponse  {
-              
-              statusCode = response.statusCode
-      
-              if statusCode == HTTPStatusCode.OK.rawValue {
-                  print(HTTPStatusCode.OK)
-              
-                 if Data != nil {
-                          do { // if data from url isn't empty, complite code
-                              let dataAPI = try JSONDecoder().decode(Service.Data.self, from: Data!)
-                              print("Dane wczytane")
-                             // print(dataAPI.data)
-                              print(Response as Any)
-                              print(Error as Any)
-                              completion(.success(dataAPI))
-                          }
-                          catch {
-                              completion(.failure(error))
-                              print("Error data...\(error)")
-                          }
-                       } else {
-                           completion(.failure(ErrorFetch.unknown))
-                       }
-              }
-              
-             else if statusCode == HTTPStatusCode.Created.rawValue {
-                 print(HTTPStatusCode.Created)
-                  }
-              else if statusCode == HTTPStatusCode.No_Content.rawValue {
-                  print(HTTPStatusCode.No_Content)
-                   }
-              else if statusCode == HTTPStatusCode.No_Content.rawValue {
-                  print(HTTPStatusCode.No_Content)
-                   }
-              else if statusCode == HTTPStatusCode.Bad_Request.rawValue {
-                       print(HTTPStatusCode.Bad_Request)
-                        }
-              else if statusCode == HTTPStatusCode.Unauthorized.rawValue {
-                  print(HTTPStatusCode.Unauthorized)
-                   }
-              else if statusCode == HTTPStatusCode.Not_Found.rawValue {
-                  print(HTTPStatusCode.Not_Found)
-                   }
-              else if statusCode == HTTPStatusCode.Not_Acceptable.rawValue {
-                  print(HTTPStatusCode.Not_Acceptable)
-                   }
-         else if (500...599).contains(statusCode) {
-                 print(HTTPStatusCode.Server_Error)
-                  }
-          }
-         
-      }
-        task.resume()
-    }
- 
-    
-    struct Data: Decodable {
-        var data: [AnimeData]
-    }
-        struct Response: Decodable {
-            var statusCode: Int
-        }
 
-        enum ResponseCodingKeys: String, CodingKey {
-            case statusCode = "Status Code"
-        }
-        
-//  enum CodingKeys: String, CodingKey{
-//
-//     case attributes = "attributes"
-//   case links = "links"
-//  }
-        
-    
-    struct AnimeData: Decodable {
-        let id: String
-        let type: String
-    //  let links: LinksData
-        let attributes: AttributesData
-    }
-  //  struct LinksData: Decodable {
-  //     let self: String
-  //
-  //
-  //  }
+class Service {
    
-    struct AttributesData: Decodable {
-        let createdAt: String
-        let updatedAt: String
-        let slug: String
-        let description: String
-        let canonicalTitle: String
-        let posterImage: PosterImageData
-    }
-    struct PosterImageData: Codable {
-        let tiny: String
-        let large: String
-        let small: String
-        let medium: String
-        let original: String
-    }
+    func fetchRequest <D: Decodable> (expecting: D.Type,
+                                    endpoint: URL?,
+                                      completion: @escaping (Result<D, httpStatusCode>) -> Void) {
+        
+        guard let url = endpoint else {
+            completion(.failure(httpStatusCode.badURL))
+            return
+      }
+
+        let task = URLSession.shared.dataTask(with: url){data, response , error in
+            
+            if let error = error as? URLError {
+                completion(Result.failure(httpStatusCode.url(error)))
+            } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  {
+                completion(Result.failure(httpStatusCode.badResponse(statusCode: response.statusCode)))
+            }else if let data = data {
+                do{
+                    let result = try JSONDecoder().decode(expecting, from: data)
+                    completion(.success(result))
+                }
+                catch {
+                    completion(.failure(httpStatusCode.parsing(error as? DecodingError)))
+                }
+            }
+                }
+        task.resume()
+  }
     
 }
-
+ 
+ 
 
 
 // Data structure
