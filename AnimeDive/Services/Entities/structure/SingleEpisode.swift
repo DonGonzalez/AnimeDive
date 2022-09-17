@@ -7,9 +7,8 @@
 
 import Foundation
 
-extension Service {
-    
-    struct SingleEpisodes: Decodable {
+
+    struct SingleEpisode: Decodable {
         let data: EpisodesData
     }
-}
+

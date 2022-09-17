@@ -7,11 +7,9 @@
 
 import Foundation
 
-extension Service {
-    
-    struct AnimeData: Decodable {
+   struct AnimeData: Decodable {
         let id: String
         let type: String
-        let attributes: AttributesData
+      //  let attributes: AttributesData
     }
-}
+

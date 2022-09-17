@@ -6,9 +6,9 @@
 //
 
 import Foundation
-extension Service {
-    
-    struct SingleData: Decodable{
+
+
+    struct SingleAnime: Decodable{
         var data: AnimeData
     }
-}
+

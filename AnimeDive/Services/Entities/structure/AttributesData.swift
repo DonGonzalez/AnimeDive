@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension Service {
-    
+
+extension AnimeData {
     struct AttributesData: Decodable {
         let createdAt: String
         let updatedAt: String

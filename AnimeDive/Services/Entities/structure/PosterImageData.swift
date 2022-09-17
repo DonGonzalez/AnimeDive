@@ -6,8 +6,8 @@
 //
 
 import Foundation
-extension Service {
-    
+
+extension AnimeData{
     struct PosterImageData: Decodable {
         let tiny: String
         let large: String
@@ -15,5 +15,5 @@ extension Service {
         let medium: String
         let original: String
     }
-    
 }
+

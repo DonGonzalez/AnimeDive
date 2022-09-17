@@ -6,9 +6,9 @@
 //
 
 import Foundation
-extension Service {
+
     
     struct Episodes: Decodable {
         var data: [EpisodesData]
     }
-}
+

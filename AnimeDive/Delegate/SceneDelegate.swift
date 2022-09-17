@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let WindowSC = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: WindowSC.coordinateSpace.bounds)
         window?.windowScene = WindowSC
-        window?.rootViewController = MyViewModel.create()
+        window?.rootViewController = AnimeViewModel.create()
         window?.makeKeyAndVisible()
     }
 
