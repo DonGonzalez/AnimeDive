@@ -7,23 +7,19 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-// grafic shell + button action
+class AnimeViewController: UIViewController {
+    // grafic shell + button action
     
-    
-    var viewModel: MyViewModel?
+    var viewModel: AnimeViewModel?
     // funkcja, ktora uruchamiasz po stworzenie instancji view controllera
-    func assignDependencies(viewModel: MyViewModel) {
+    func assignDependencies(viewModel: AnimeViewModel) {
         self.viewModel = viewModel
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        viewModel?.uploadDataFromBeckend()
-       
+        viewModel?.getDataFromBeckend()
     }
-   
-
 }
 
