@@ -15,17 +15,17 @@ enum HttpStatusCode: Error, CustomStringConvertible {
     case parsing(DecodingError?)
     case unknown
     
-    //  var localizedDescription: String {
-    //      // user description
-    //      switch self {
-    //      case .badURL, .parsing, .unknown:
-    //          return "Sorry, something went wrong."
-    //      case .badResponse(statusCode: _):
-    //          return " Sorry the connection to your server failed. "
-    //      case .url(let error):
-    //          return error?.localizedDescription ?? "Something went wrong"
-    //      }
-    //  }
+    var localizedDescription: String {
+        // user description
+        switch self {
+        case .badURL, .parsing, .unknown:
+            return "Sorry, something went wrong."
+        case .badResponse(statusCode: _):
+            return " Sorry the connection to your server failed. "
+        case .url(let error):
+            return error?.localizedDescription ?? "Something went wrong"
+        }
+    }
     
     var description: String {
         // info for debugging

@@ -10,7 +10,6 @@ import UIKit
 //view model - logic
 
 class AnimeViewModel {
-    
     let navigator: UINavigationController
     var isloading: Bool = false
     var errorMessage: String? = nil
@@ -22,20 +21,9 @@ class AnimeViewModel {
 }
 
 //Mark: Interactor
-//interactor - question to beckend, API
+//interactor - API handler
 extension AnimeViewModel {
-    
     func getDataFromBeckend () {
-        isloading = true
-        Services.shared.getSingleAnime(endpoint: .singleAnime(id: id), completion: { result in
-            self.isloading = false
-            switch result {
-            case .failure(let error):
-                print(error.description)
-            case .success(let result):
-                return print(result)
-            }
-        })
         Services.shared.getAnime(endpoint: .allAnime, completion: { result in
             self.isloading = false
             switch result {
