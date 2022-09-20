@@ -8,102 +8,43 @@
 import Foundation
 import UIKit
 
-
 class Services {
     
-    static let shered = Services()
+    static let shared = Services()
+    private init() {}
     
-    private init(){}
-    
-    //  func fetch <D: Decodable> (_ Type: D.Type,
-    //                                    endpoint: URL?,
-    //                                    completion: @escaping (Result<D, HttpStatusCode>) -> Void) {
-    //
-    //      guard let url = endpoint else {
-    //          completion(.failure(HttpStatusCode.badURL))
-    //          return
-    //      }
-    //
-    //      let task = URLSession.shared.dataTask(with: url){data, response , error in
-    //
-    //          if let error = error as? URLError {
-    //              completion(Result.failure(HttpStatusCode.url(error)))
-    //          } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  //{
-    //              completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
-    //          }else if let data = data {
-    //              do{
-    //                  let result = try JSONDecoder().decode(Type, from: data)
-    //                  completion(.success(result))
-    //              }
-    //              catch {
-    //                  completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
-    //              }
-    //          }
-    //      }
-    //      task.resume()
-    //  }
-    // function  ver 2
-    
-    //    func fetchAnime(endpoint: URL?, completion: @ escaping (Result<Anime,HttpStatusCode>)->Void){
-    //        guard let url = endpoint else {
-    //            completion(.failure(HttpStatusCode.badURL))
-    //            return
-    //        }
-    //
-    //        let task = URLSession.shared.dataTask(with: url){data, response , error in
-    //
-    //            if let error = error as? URLError {
-    //                completion(Result.failure(HttpStatusCode.url(error)))
-    //            } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  //{
-    //                completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
-    //            }else if let data = data {
-    //                do{
-    //                    let result = try JSONDecoder().decode(Anime.self, from: data)
-    //                    completion(.success(result))
-    //                }
-    //                catch {
-    //                    completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
-    //                }
-    //            }
-    //        }
-    //        task.resume()
-    //    }
-    func getAnime (endpoint:Endpoint,
-                   complition: @ escaping ((Result<Anime, HttpStatusCode>)->Void)){
+    func getAnime (endpoint: Endpoint,
+                   completion: @ escaping ((Result<Anime, HttpStatusCode>) -> Void)) {
         request(endpoint:endpoint.url,
-                completion: complition)
+                completion: completion)
     }
     func getEpisodes (endpoint: Endpoint,
-                      complition: @ escaping ((Result<Episodes, HttpStatusCode>)->Void)){
+                      completion: @ escaping ((Result<Episodes, HttpStatusCode>) -> Void)) {
         request(endpoint: endpoint.url,
-                completion: complition)
+                completion: completion)
     }
     func getSingleAnime (endpoint: Endpoint,
-                         complition: @ escaping ((Result<SingleAnime, HttpStatusCode>)->Void)){
+                         completion: @ escaping ((Result<SingleAnime, HttpStatusCode>) -> Void)) {
         request(endpoint: endpoint.url,
-                completion: complition)
+                completion: completion)
     }
     func getSingleEpisodes (endpoint: Endpoint,
-                            complition: @ escaping ((Result<SingleEpisode, HttpStatusCode>)->Void)){
+                            completion: @ escaping ((Result<SingleEpisode, HttpStatusCode>) -> Void)) {
         request(endpoint: endpoint.url,
-                completion: complition)
+                completion: completion)
     }
-    
-    private func request <T: Decodable>(endpoint: URL?, completion: @ escaping(Result<T, HttpStatusCode>)->Void){
-       
+    private func request <T: Decodable> (endpoint: URL?, completion: @ escaping (Result<T, HttpStatusCode>) -> Void) {
         guard let url = endpoint else {
             completion(.failure(HttpStatusCode.badURL))
-           return
+            return
         }
-        
-        let task = URLSession.shared.dataTask(with: url){data, response , error in
-            
+        let task = URLSession.shared.dataTask(with: url) {data, response , error in
             if let error = error as? URLError {
                 completion(Result.failure(HttpStatusCode.url(error)))
             } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  {
                 completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
             }else if let data = data {
-                do{
+                do {
                     let result = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(result))
                 }
@@ -115,9 +56,6 @@ class Services {
         task.resume()
     }
 }
-
-
-
 
 // Data structure
 /*

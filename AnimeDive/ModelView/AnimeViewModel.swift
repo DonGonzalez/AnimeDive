@@ -7,50 +7,40 @@
 
 import Foundation
 import UIKit
+//view model - logic
 
 class AnimeViewModel {
-    //view model - logic
+    
     let navigator: UINavigationController
-    var isloading: Bool
+    var isloading: Bool = false
     var errorMessage: String? = nil
+    var id: Int = 6
     
     init (navigator: UINavigationController) {
         self.navigator = navigator
-        self.isloading = false
-        
     }
 }
 
 //Mark: Interactor
-extension AnimeViewModel{
-    //interactor - question to beckend, API
+//interactor - question to beckend, API
+extension AnimeViewModel {
     
     func getDataFromBeckend () {
-        //    isloading = true
-        //
-        //    Service.shered.fetch(Episodes.self, endpoint: Endpoint.allAnime.url) {result in
-        //        switch result{
-        //        case .failure(let error):
-        //            print(error.description)
-        //            //  print(error)
-        //        case .success(let result):
-        //            return print(result)
-        //        }
-        //    }
-        Services.shered.getSingleAnime(endpoint: Endpoint.singleAnime(id: 3), complition: {result in
-        switch result{
-        case .failure(let error):
-            print(error.description)
-            //  print(error)
-        case .success(let result):
-            return print(result)
-        }
-        })
-        Services.shered.getAnime(endpoint: Endpoint.episodes, complition: { result in
-            switch result{
+        isloading = true
+        Services.shared.getSingleAnime(endpoint: .singleAnime(id: id), completion: { result in
+            self.isloading = false
+            switch result {
             case .failure(let error):
                 print(error.description)
-                //  print(error)
+            case .success(let result):
+                return print(result)
+            }
+        })
+        Services.shared.getAnime(endpoint: .allAnime, completion: { result in
+            self.isloading = false
+            switch result {
+            case .failure(let error):
+                print(error.description)
             case .success(let result):
                 return print(result)
             }
@@ -59,13 +49,12 @@ extension AnimeViewModel{
 }
 
 //Mark: Router
-extension AnimeViewModel{
-    //router - navigation between screen, show models
+//router - navigation between screen, show models
+extension AnimeViewModel {
     static func create() -> UIViewController {
-        
         let navigator = UINavigationController()
         let viewModel = AnimeViewModel(navigator: navigator)
-        let vc = ViewController()
+        let vc = AnimeViewController()
         vc.assignDependencies(viewModel: viewModel)
         vc.title = "Menu"
         vc.view.backgroundColor = .white

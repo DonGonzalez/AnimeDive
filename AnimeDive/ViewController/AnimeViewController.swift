@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class AnimeViewController: UIViewController {
     // grafic shell + button action
     
     var viewModel: AnimeViewModel?

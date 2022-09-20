@@ -7,9 +7,8 @@
 
 import Foundation
 
-
 enum HttpStatusCode: Error, CustomStringConvertible {
-   
+    
     case badURL
     case badResponse(statusCode: Int)
     case url(URLError?)
@@ -39,11 +38,10 @@ enum HttpStatusCode: Error, CustomStringConvertible {
             return "parsing error \(error?.localizedDescription ?? "")"
         case .badResponse(statusCode: let statusCode):
             return "bad response with status code \(statusCode)"
-            
         }
     }
-    }
-  
-    
+}
+
+
 
 
