@@ -53,3 +53,18 @@ extension AnimeViewModel {
 }
 
 
+//enum MessageErrorType {
+//case success(String)
+//case failure(String)
+//
+//var backgroundColor: UIColor {
+//switch self {
+//case .success:  return .green
+//case .failure:     return .red
+//}
+//}
+//}
+//Krzysztof Banaczyk19:49
+//errorType: MessageErrorType
+//w Message View ->
+//self.backgroundColor = errorType.backgroundColor

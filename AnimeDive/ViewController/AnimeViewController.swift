@@ -17,7 +17,6 @@ class AnimeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
         self.viewModel?.messageError = {
             messageText, color in
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -33,6 +32,7 @@ class AnimeViewController: UIViewController {
                     messageView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
                     messageView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -5)
                 ])
+                //w messageView
                 messageView.perform(#selector(messageView.delay), with: nil, afterDelay: 3)
             }
         }
