@@ -10,5 +10,5 @@ import UIKit
 
 class GeneralViewModel {
   
-    var messageError: ((String, UIColor) -> Void)?
+    var messageError: ((MessageErrorType) -> Void)?
 }

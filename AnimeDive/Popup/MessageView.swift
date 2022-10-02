@@ -12,9 +12,7 @@ class MessageView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        DispatchQueue.main.async {
-            self.animationIn()
-        }
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -69,6 +67,10 @@ class MessageView: UIView {
             stackView.rightAnchor.constraint(equalTo: self.rightAnchor)
         ])
     }
+}
+    // animation part
+    // I want this save, as a example.
+    /*
     @objc func delay() {
         self.animationOut()
     }
@@ -78,6 +80,11 @@ class MessageView: UIView {
         UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveLinear, animations: {
             self.transform = .identity
         })
+        {(startDelay) in
+            if startDelay {
+                self.perform(#selector(self.delay), with: nil, afterDelay: 3)
+            }
+        }
     }
     func animationOut() {
         UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveLinear, animations: {
@@ -89,6 +96,7 @@ class MessageView: UIView {
             }
         }
     }
-}
+     */
+
 
 
