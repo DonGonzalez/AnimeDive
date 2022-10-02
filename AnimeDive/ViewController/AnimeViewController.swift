@@ -20,7 +20,7 @@ class AnimeViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.viewModel?.messageError = {
             data in
-            PopupAlert.shared.createAlert(view: self, title: "Message", message: data)
+            PopupAlert.shared.createAlert(view: self, title: "Message", errorData: data)
         }
     }
     

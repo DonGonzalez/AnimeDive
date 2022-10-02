@@ -15,8 +15,8 @@ case failure (String)
 
 var backgroundColor: UIColor {
 switch self {
-case .success:  return .green
-case .failure:     return .red
+case .success:     return .systemGreen
+case .failure:     return .systemRed
 }
 }
     var message: String {

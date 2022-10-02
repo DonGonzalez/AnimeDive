@@ -29,7 +29,7 @@ extension AnimeViewModel {
                     print(error.description)
                     self.messageError!(MessageErrorType.failure(error.description))
                 case .success(let result):
-                    // print(result)
+                     print(result)
                     print("fetch complited")
                     self.messageError!(MessageErrorType.success("Fetch complited"))
                 }

@@ -47,7 +47,6 @@ class MessageView: UIView {
         let stackView = UIStackView()
         stackView.layer.cornerRadius = 8
         stackView.spacing = 1
-        stackView.backgroundColor = .systemGreen
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.distribution = .fillProportionally

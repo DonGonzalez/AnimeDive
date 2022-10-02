@@ -13,17 +13,17 @@ class PopupAlert: NSObject{
     static let shared = PopupAlert()
     //Show alert
     
-    func createAlert(view: UIViewController, title: String, message: MessageErrorType) {
-        let alert = UIAlertController(title: title, message: message.message, preferredStyle: .actionSheet)
+    func createAlert(view: UIViewController, title: String, errorData: MessageErrorType) {
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
         alert.isSpringLoaded = true
         alert.view?.layer.cornerRadius = 8
-        alert.view.backgroundColor = message.backgroundColor
+        alert.view.backgroundColor = .clear
         // Create custom MessageView
         let customView: UIView = {
             let customView = MessageView()
-            customView.backgroundColor = .blue
-            customView.messageLabel.text = message.message
+            customView.messageLabel.text = errorData.message
             customView.titleLabel.text = title
+            customView.stackView.backgroundColor = errorData.backgroundColor
             return customView
         }()
         
