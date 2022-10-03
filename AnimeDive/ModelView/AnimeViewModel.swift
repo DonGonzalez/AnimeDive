@@ -12,6 +12,7 @@ import UIKit
 class AnimeViewModel: GeneralViewModel {
     let navigator: UINavigationController
     var id: Int = 6
+    var APIData: [Decodable] = []
     
     init (navigator: UINavigationController) {
         self.navigator = navigator
@@ -22,17 +23,17 @@ class AnimeViewModel: GeneralViewModel {
 extension AnimeViewModel {
     
     func getDataFromBeckend () {
+        
         Services.shared.getAnime(endpoint: .allAnime, completion: { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    print(error.description)
-                    self.messageError!(MessageErrorType.failure(error.description))
-                case .success(let result):
-                     print(result)
-                    print("fetch complited")
-                    self.messageError!(MessageErrorType.success("Fetch complited"))
-                }
+            switch result {
+            case .failure(let error):
+                print(error.description)
+                self.messageError!(.failure(error.description))
+            case .success(let result):
+                self.APIData = [result]
+                print(self.APIData)
+                print("fetch complited")
+                self.messageError!(.success("Fetch complited"))
             }
         })
     }

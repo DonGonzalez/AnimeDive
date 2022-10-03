@@ -9,6 +9,5 @@ import Foundation
 import UIKit
 
 class GeneralViewModel {
-  
     var messageError: ((MessageErrorType) -> Void)?
 }

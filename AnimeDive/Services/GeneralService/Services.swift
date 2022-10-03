@@ -43,13 +43,15 @@ class Services {
                 completion(Result.failure(HttpStatusCode.url(error)))
             } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  {
                 completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
-            }else if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(result))
-                }
-                catch {
-                    completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
+            } else if let data = data {
+                DispatchQueue.main.async {
+                    do {
+                        let result = try JSONDecoder().decode(T.self, from: data)
+                        completion(.success(result))
+                    }
+                    catch {
+                        completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
+                    }
                 }
             }
         }

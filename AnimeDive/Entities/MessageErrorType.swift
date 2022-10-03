@@ -8,17 +8,16 @@
 import Foundation
 import UIKit
 
-
 enum MessageErrorType {
-case success (String)
-case failure (String)
-
-var backgroundColor: UIColor {
-switch self {
-case .success:     return .systemGreen
-case .failure:     return .systemRed
-}
-}
+    case success (String)
+    case failure (String)
+    
+    var backgroundColor: UIColor {
+        switch self {
+        case .success:     return .systemGreen
+        case .failure:     return .systemRed
+        }
+    }
     var message: String {
         switch self{
         case .success(let message):
@@ -28,8 +27,3 @@ case .failure:     return .systemRed
         }
     }
 }
-
-//Krzysztof Banaczyk19:49
-//errorType: MessageErrorType
-//w Message View ->
-//self.backgroundColor = errorType.backgroundColor

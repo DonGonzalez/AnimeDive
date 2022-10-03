@@ -10,9 +10,12 @@ import UIKit
 
 class MessageView: UIView {
     
-    override init(frame: CGRect) {
+    var errorData: MessageErrorType!
+    
+    init(frame: CGRect, errorData: MessageErrorType) {
         super.init(frame: frame)
-        configure()
+        self.errorData = errorData
+        self.configure()
     }
     
     required init?(coder: NSCoder) {
@@ -54,10 +57,12 @@ class MessageView: UIView {
         stackView.addArrangedSubview(messageLabel)
         return stackView
     }()
-   
-    func configure() {
+    
+    private func configure() {
         self.layer.cornerRadius = 8
         self.addSubview(stackView)
+        stackView.backgroundColor = errorData.backgroundColor
+        messageLabel.text = errorData.message
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -67,35 +72,35 @@ class MessageView: UIView {
         ])
     }
 }
-    // animation part
-    // I want this save, as a example.
-    /*
-    @objc func delay() {
-        self.animationOut()
-    }
-    func animationIn() {
-        print("animation begin")
-        self.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
-        UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveLinear, animations: {
-            self.transform = .identity
-        })
-        {(startDelay) in
-            if startDelay {
-                self.perform(#selector(self.delay), with: nil, afterDelay: 3)
-            }
-        }
-    }
-    func animationOut() {
-        UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveLinear, animations: {
-            self.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
-        }) { (complite) in
-            if complite {
-                print("complite")
-                self.removeFromSuperview()
-            }
-        }
-    }
-     */
+// animation part
+// I want this save, as a example.
+/*
+ @objc func delay() {
+ self.animationOut()
+ }
+ func animationIn() {
+ print("animation begin")
+ self.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
+ UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveLinear, animations: {
+ self.transform = .identity
+ })
+ {(startDelay) in
+ if startDelay {
+ self.perform(#selector(self.delay), with: nil, afterDelay: 3)
+ }
+ }
+ }
+ func animationOut() {
+ UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveLinear, animations: {
+ self.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
+ }) { (complite) in
+ if complite {
+ print("complite")
+ self.removeFromSuperview()
+ }
+ }
+ }
+ */
 
 
 
