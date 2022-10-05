@@ -9,33 +9,30 @@ import Foundation
 import UIKit
 //view model - logic
 
-class AnimeViewModel {
+class AnimeViewModel: GeneralViewModel {
     let navigator: UINavigationController
-    var isloading: Bool = false
-    var errorMessage: String? = nil
     var id: Int = 6
+    var APIData: [Decodable] = []
     
     init (navigator: UINavigationController) {
         self.navigator = navigator
     }
 }
-
 //Mark: Interactor
 //interactor - API handler
 extension AnimeViewModel {
     func getDataFromBeckend () {
         Services.shared.getAnime(endpoint: .allAnime, completion: { result in
-            self.isloading = false
             switch result {
             case .failure(let error):
-                print(error.description)
+                self.messageError!(.failure(error.description))
             case .success(let result):
-                return print(result)
+                self.APIData = [result]
+                self.messageError!(.success("Fetch complited"))
             }
         })
     }
 }
-
 //Mark: Router
 //router - navigation between screen, show models
 extension AnimeViewModel {
@@ -50,5 +47,3 @@ extension AnimeViewModel {
         return navigator
     }
 }
-
-

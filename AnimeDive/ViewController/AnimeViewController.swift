@@ -6,12 +6,11 @@
 //
 
 import UIKit
-
+// grafic shell + button action
+// funkcja, ktora uruchamiasz po stworzenie instancji view controllera
 class AnimeViewController: UIViewController {
-    // grafic shell + button action
     
     var viewModel: AnimeViewModel?
-    // funkcja, ktora uruchamiasz po stworzenie instancji view controllera
     func assignDependencies(viewModel: AnimeViewModel) {
         self.viewModel = viewModel
     }
@@ -19,7 +18,21 @@ class AnimeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        viewModel?.getDataFromBeckend()
+        configure()
+    }
+    
+    private func configure() {
+        self.viewModel?.messageError = { data in
+            PopupAlert.shared.createAlert(view: self, title: "Message", errorData: data)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
+            self.viewModel?.getDataFromBeckend()
+        }
     }
 }
+
+
 
