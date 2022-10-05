@@ -10,11 +10,11 @@ import UIKit
 
 class MessageView: UIView {
     
-    var errorData: MessageErrorType!
+    private var errorData: MessageErrorType!
     
-    init(frame: CGRect, errorData: MessageErrorType) {
-        super.init(frame: frame)
+    init(errorData: MessageErrorType) {
         self.errorData = errorData
+        super.init(frame: .zero)
         self.configure()
     }
     

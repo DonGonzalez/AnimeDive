@@ -21,18 +21,13 @@ class AnimeViewModel: GeneralViewModel {
 //Mark: Interactor
 //interactor - API handler
 extension AnimeViewModel {
-    
     func getDataFromBeckend () {
-        
         Services.shared.getAnime(endpoint: .allAnime, completion: { result in
             switch result {
             case .failure(let error):
-                print(error.description)
                 self.messageError!(.failure(error.description))
             case .success(let result):
                 self.APIData = [result]
-                print(self.APIData)
-                print("fetch complited")
                 self.messageError!(.success("Fetch complited"))
             }
         })

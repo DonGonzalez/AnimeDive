@@ -11,7 +11,6 @@ import UIKit
 class Services {
     
     static let shared = Services()
-    private init() {}
     
     func getAnime (endpoint: Endpoint,
                    completion: @ escaping ((Result<Anime, HttpStatusCode>) -> Void)) {
@@ -40,9 +39,13 @@ class Services {
         }
         let task = URLSession.shared.dataTask(with: url) {data, response , error in
             if let error = error as? URLError {
-                completion(Result.failure(HttpStatusCode.url(error)))
+                DispatchQueue.main.async {
+                    completion(Result.failure(HttpStatusCode.url(error)))
+                }
             } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  {
-                completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
+                DispatchQueue.main.async {
+                    completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
+                }
             } else if let data = data {
                 DispatchQueue.main.async {
                     do {

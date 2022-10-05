@@ -18,7 +18,7 @@ class PopupAlert: NSObject {
         alert.view?.layer.cornerRadius = 8
         alert.view.backgroundColor = .clear
         // Create custom MessageView
-        let customView = MessageView(frame: .zero, errorData: errorData)
+        let customView = MessageView(errorData: errorData)
         alert.view.addSubview(customView)
         customView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([

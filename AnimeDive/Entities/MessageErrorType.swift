@@ -19,7 +19,7 @@ enum MessageErrorType {
         }
     }
     var message: String {
-        switch self{
+        switch self {
         case .success(let message):
             return message
         case .failure(let message):
