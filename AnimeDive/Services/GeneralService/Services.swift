@@ -66,11 +66,14 @@ class Services {
         task.resume()
     }
 }
+var imageCache = NSCache <AnyObject, AnyObject> ()
 extension UIImageView {
-    
+   
     func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFill){
         contentMode = mode
-      //  if let image = imageCah
+        if let image = imageCache.object(forKey: url as NSURL) as? UIImage? {
+            self.image = image
+        }
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard
                 let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
@@ -78,6 +81,7 @@ extension UIImageView {
                 let image = UIImage(data: data)
             else { return }
             DispatchQueue.main.async() { [weak self] in
+                imageCache.setObject(image, forKey: url as NSURL)
                 self?.image = image
             }
         }.resume()
