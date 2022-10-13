@@ -17,6 +17,8 @@ class AnimeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         // Do any additional setup after loading the view.
         configure()
     }
@@ -24,12 +26,28 @@ class AnimeViewController: UIViewController {
     private func configure() {
         self.viewModel?.messageError = { data in
             PopupAlert.shared.createAlert(view: self, title: "Message", errorData: data)
+            
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.viewModel?.getDataFromBeckend()
+            self.viewModel?.dataAPI = {
+                dataAPI in
+                print("tableview")
+                let animeTableView = AnimeTableView(data: dataAPI as! Anime)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.view.addSubview(animeTableView)
+                    animeTableView.translatesAutoresizingMaskIntoConstraints = false
+                    NSLayoutConstraint.activate([
+                        animeTableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                        animeTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+                        animeTableView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
+                        animeTableView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
+                    ])
+                }
+            }
         }
     }
 }

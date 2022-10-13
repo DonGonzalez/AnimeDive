@@ -32,9 +32,12 @@ class Services {
         request(endpoint: endpoint.url,
                 completion: completion)
     }
+    
     private func request <T: Decodable> (endpoint: URL?, completion: @ escaping (Result<T, HttpStatusCode>) -> Void) {
         guard let url = endpoint else {
-            completion(.failure(HttpStatusCode.badURL))
+            DispatchQueue.main.async {
+                completion(.failure(HttpStatusCode.badURL))
+            }
             return
         }
         let task = URLSession.shared.dataTask(with: url) {data, response , error in
@@ -47,18 +50,37 @@ class Services {
                     completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
                 }
             } else if let data = data {
-                DispatchQueue.main.async {
-                    do {
-                        let result = try JSONDecoder().decode(T.self, from: data)
+                do {
+                    let result = try JSONDecoder().decode(T.self, from: data)
+                    DispatchQueue.main.async {
                         completion(.success(result))
                     }
-                    catch {
+                }
+                catch {
+                    DispatchQueue.main.async {
                         completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
                     }
                 }
             }
         }
         task.resume()
+    }
+}
+extension UIImageView {
+    
+    func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFill){
+        contentMode = mode
+      //  if let image = imageCah
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+            else { return }
+            DispatchQueue.main.async() { [weak self] in
+                self?.image = image
+            }
+        }.resume()
     }
 }
 
@@ -154,3 +176,4 @@ class Services {
  "related":"https://kitsu.io/api/edge/anime/1/anime-staff"}}}}
  
  */
+

@@ -72,6 +72,7 @@ class MessageView: UIView {
         ])
     }
 }
+
 // animation part
 // I want this save, as a example.
 /*
