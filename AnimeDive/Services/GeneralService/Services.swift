@@ -34,55 +34,53 @@ class Services {
     }
     
     private func request <T: Decodable> (endpoint: URL?, completion: @ escaping (Result<T, HttpStatusCode>) -> Void) {
-        guard let url = endpoint else {
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            guard let url = endpoint else {
                 completion(.failure(HttpStatusCode.badURL))
+                return
             }
-            return
-        }
-        let task = URLSession.shared.dataTask(with: url) {data, response , error in
-            if let error = error as? URLError {
-                DispatchQueue.main.async {
+            let task = URLSession.shared.dataTask(with: url) {data, response , error in
+                if let error = error as? URLError {
                     completion(Result.failure(HttpStatusCode.url(error)))
-                }
-            } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  {
-                DispatchQueue.main.async {
-                    completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
-                }
-            } else if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(T.self, from: data)
+                } else  if let response = response as? HTTPURLResponse, !(200...299).contains(response.statusCode)  {
                     DispatchQueue.main.async {
+                        completion(Result.failure(HttpStatusCode.badResponse(statusCode: response.statusCode)))
+                    }
+                } else if let data = data {
+                    do {
+                        let result = try JSONDecoder().decode(T.self, from: data)
                         completion(.success(result))
                     }
-                }
-                catch {
-                    DispatchQueue.main.async {
+                    catch {
                         completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
                     }
                 }
             }
+            task.resume()
         }
-        task.resume()
     }
 }
 var imageCache = NSCache <AnyObject, AnyObject> ()
 extension UIImageView {
-   
+    
     func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFill){
         contentMode = mode
         if let image = imageCache.object(forKey: url as NSURL) as? UIImage? {
             self.image = image
         }
         URLSession.shared.dataTask(with: url) { data, response, error in
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-            else { return }
-            DispatchQueue.main.async() { [weak self] in
+            DispatchQueue.main.async() {
+                guard  let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                       let data = data, error == nil,
+                       let image = UIImage(data: data)
+                else {
+                    self.image = UIImage(systemName: "photo")
+                    self.contentMode = .scaleAspectFit
+                    self.backgroundColor = .white
+                    return
+                }
                 imageCache.setObject(image, forKey: url as NSURL)
-                self?.image = image
+                self.image = image
             }
         }.resume()
     }

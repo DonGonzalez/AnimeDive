@@ -20,19 +20,17 @@ class AnimeViewModel: GeneralViewModel {
 //Mark: Interactor
 //interactor - API handler
 extension AnimeViewModel {
+    
     func getDataFromBeckend () {
-        
-        Services.shared.getAnime(endpoint: .allAnime, completion: { result in
+        Services.shared.getAnime(endpoint: .allAnime, completion: { [weak self] result in
             DispatchQueue.main.async {
-            switch result {
-            case .failure(let error):
-                self.messageError!(.failure(error.description))
-                print(error.description)
-            case .success(let result):
-                self.dataAPI!(result)
-                print(result)
-                self.messageError!(.success("Fetch complited"))
-            }
+                switch result {
+                case .failure(let error):
+                    self?.messageError?(.failure(error.description))
+                case .success(let result):
+                    self?.dataAPI?(result)
+                    self?.messageError?(.success("Fetch complited"))
+                }
             }
         })
     }
@@ -40,6 +38,7 @@ extension AnimeViewModel {
 //Mark: Router
 //router - navigation between screen, show models
 extension AnimeViewModel {
+    
     static func create() -> UIViewController {
         let navigator = UINavigationController()
         let viewModel = AnimeViewModel(navigator: navigator)
