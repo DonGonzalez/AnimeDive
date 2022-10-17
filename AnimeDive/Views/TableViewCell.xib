@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AnimeTableView" customModule="AnimeDive" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" restorationIdentifier="TableViewCell" selectionStyle="default" indentationWidth="10" reuseIdentifier="TableViewCell" rowHeight="131" id="KGk-i7-Jjw" customClass="TableViewCell" customModule="AnimeDive" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="131"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="300" height="131"/>
+                <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hdp-ae-NQ7">
+                        <rect key="frame" x="145" y="11" width="139" height="109"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9fX-ct-Ehz" userLabel="Title">
+                                <rect key="frame" x="0.0" y="0.0" width="139" height="52"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yq9-RQ-nI3" userLabel="Amount of season: ">
+                                <rect key="frame" x="0.0" y="57" width="139" height="52"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                    <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0b4-qD-rxU">
+                        <rect key="frame" x="16" y="11" width="109" height="109"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="109" id="7MI-gn-8Kb"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="109" id="YmP-Ss-IxR"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="0b4-qD-rxU" secondAttribute="bottom" id="5dC-aH-7gL"/>
+                    <constraint firstItem="0b4-qD-rxU" firstAttribute="bottom" secondItem="hdp-ae-NQ7" secondAttribute="bottom" id="6z1-5b-oia"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="hdp-ae-NQ7" secondAttribute="trailing" id="LMD-P5-qMM"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="hdp-ae-NQ7" secondAttribute="bottom" id="NcW-z8-78Z"/>
+                    <constraint firstItem="0b4-qD-rxU" firstAttribute="top" secondItem="hdp-ae-NQ7" secondAttribute="top" id="PQs-BT-ita"/>
+                    <constraint firstItem="0b4-qD-rxU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="bXG-tR-0so"/>
+                    <constraint firstItem="hdp-ae-NQ7" firstAttribute="leading" secondItem="0b4-qD-rxU" secondAttribute="trailing" constant="20" id="e8K-XA-MEd"/>
+                    <constraint firstItem="hdp-ae-NQ7" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="egk-DQ-8Fq"/>
+                    <constraint firstItem="0b4-qD-rxU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="pRf-dE-5bP"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="animeImage" destination="0b4-qD-rxU" id="byF-OA-Wl0"/>
+                <outlet property="seasonLabel" destination="Yq9-RQ-nI3" id="STE-CJ-h6y"/>
+                <outlet property="titleLabel" destination="9fX-ct-Ehz" id="RdF-wf-nU7"/>
+            </connections>
+            <point key="canvasLocation" x="-55.072463768115945" y="-49.888392857142854"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

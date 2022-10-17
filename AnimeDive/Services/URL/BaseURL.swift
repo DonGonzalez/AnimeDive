@@ -7,6 +7,7 @@
 import Foundation
 
 extension URL {
+    
     static func makeURLWithEndpoint(endpoint: String) -> URL {
         URL(string:"https://kitsu.io/api/edge/\(endpoint)")!
     }
