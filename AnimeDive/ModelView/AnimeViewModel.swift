@@ -7,11 +7,11 @@
 
 import Foundation
 import UIKit
-//view model - logic
 
+//view model - logic
 class AnimeViewModel: GeneralViewModel {
+    
     let navigator: UINavigationController
-    var APIData: [Decodable] = []
     
     init (navigator: UINavigationController) {
         self.navigator = navigator
@@ -44,7 +44,7 @@ extension AnimeViewModel {
         let viewModel = AnimeViewModel(navigator: navigator)
         let vc = AnimeViewController()
         vc.assignDependencies(viewModel: viewModel)
-        vc.title = "Menu"
+        vc.title = "Anime"
         vc.view.backgroundColor = .white
         navigator.setViewControllers([vc], animated: false)
         return navigator

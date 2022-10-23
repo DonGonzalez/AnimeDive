@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+protocol AnimeDetalsProtocol{
+    func animeDetals(index: Int)
+}
+
 class AnimeTableView: UITableView {
     
     private let identifier = "TableViewCell"
@@ -17,7 +21,6 @@ class AnimeTableView: UITableView {
     init(data: Anime) {
         super.init(frame: .zero, style: .plain)
         self.data = data
-        self.delegate = self
         self.dataSource = self
         self.register(UINib(nibName: identifier,
                             bundle: nil),
@@ -26,12 +29,6 @@ class AnimeTableView: UITableView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
-    }
-}
-
-extension AnimeTableView: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
 }
 
@@ -50,3 +47,4 @@ extension AnimeTableView: UITableViewDataSource {
         return cell
     }
 }
+

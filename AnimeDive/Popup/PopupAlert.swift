@@ -27,10 +27,10 @@ class PopupAlert: NSObject {
             customView.leftAnchor.constraint(equalTo: alert.view.leftAnchor),
             customView.rightAnchor.constraint(equalTo: alert.view.rightAnchor)
         ])
-        view.present(alert, animated: true)
-        Timer.scheduledTimer(withTimeInterval: 3, repeats: false) {
-            (Timer) in
-            view.dismiss(animated: true)
+        view.present(alert, animated: true) {
+            Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                view.dismiss(animated: true)
+            }
         }
     }
 }
