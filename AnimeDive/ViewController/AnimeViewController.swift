@@ -6,11 +6,14 @@
 //
 
 import UIKit
+
 // grafic shell + button action
 // funkcja, ktora uruchamiasz po stworzenie instancji view controllera
 class AnimeViewController: UIViewController, UINavigationControllerDelegate {
     
     var viewModel: AnimeViewModel?
+    var animationEnd = false
+    
     func assignDependencies(viewModel: AnimeViewModel) {
         self.viewModel = viewModel
     }
@@ -18,16 +21,14 @@ class AnimeViewController: UIViewController, UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.configure()
+        self.viewModel?.getDataFromBeckend()
+        self.tableViewConfigure()
+        self.pushInVC()
+        self.getSingleData()
+        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        DispatchQueue.main.asyncAfter(deadline: .now()) {
-            self.configure()
-            LoadingPopup.shared.delegate = self
-            self.viewModel?.getDataFromBeckend()
-            self.tableViewConfigure()
-        }
-    }
     private func configure() {
         self.viewModel?.messageError = { data in
             PopupAlert.shared.createAlert(view: self,
@@ -36,33 +37,48 @@ class AnimeViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     private func tableViewConfigure() {
-        self.viewModel?.dataAPI = {
+        self.viewModel?.dataAPI = { [weak self]
             dataAPI in
             let animeTableView = AnimeTableView(data: dataAPI as! Anime)
-            self.view.addSubview(animeTableView)
+            self?.view.addSubview(animeTableView)
             animeTableView.delegate = self
             animeTableView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                animeTableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-                animeTableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-                animeTableView.leftAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leftAnchor),
-                animeTableView.rightAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.rightAnchor)
+                animeTableView.topAnchor.constraint(equalTo: self!.view.safeAreaLayoutGuide.topAnchor),
+                animeTableView.bottomAnchor.constraint(equalTo: self!.view.safeAreaLayoutGuide.bottomAnchor),
+                animeTableView.leftAnchor.constraint(equalTo: self!.view.safeAreaLayoutGuide.leftAnchor),
+                animeTableView.rightAnchor.constraint(equalTo: self!.view.safeAreaLayoutGuide.rightAnchor)
             ])
         }
     }
+    
+    func pushInVC(){
+        self.viewModel?.singleDataAPI = { data in
+            DispatchQueue.main.async {
+                Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+                    LoadingPopup.shared.removeFromSuperview()
+                    AnimeDetailsViewModel.pushIn(navigator: self.viewModel!.navigator, data: data as! SingleAnime)
+                }
+            }
+        }
+    }
+    
+    func getSingleData() {
+        LoadingPopup.shared.popupPresented = { [weak self]
+            index in
+            self?.viewModel?.getSingleData(index: index)
+        }
+    }
 }
-extension AnimeViewController: UITableViewDelegate {
+
+extension AnimeViewController: UITableViewDelegate, UIWindowSceneDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        LoadingPopup.shared.createLoadingPopup(view: self, index: indexPath.row)
+        print("Loading popup start")
+        let applicationDelegate = UIApplication.shared.connectedScenes.first!.delegate as! SceneDelegate
+        applicationDelegate.window!.rootViewController?.view.addSubview(LoadingPopup.shared.createLoadingPopup(view: self, index: indexPath.row))
     }
 }
-extension AnimeViewController: DataFromRequestProtocol {
-    
-    func dataFromRequest(data: SingleAnime) {
-        AnimeDetailsViewModel.pushIn(navigator: viewModel!.navigator, data: data)
-        
-    }
-}
+
 
 

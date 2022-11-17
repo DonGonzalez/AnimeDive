@@ -12,7 +12,6 @@ import UIKit
 class AnimeViewModel: GeneralViewModel {
     
     let navigator: UINavigationController
-    
     init (navigator: UINavigationController) {
         self.navigator = navigator
     }
@@ -31,6 +30,20 @@ extension AnimeViewModel {
                     self?.dataAPI?(result)
                     self?.messageError?(.success("Fetch complited"))
                 }
+            }
+        })
+    }
+    
+    func getSingleData (index: Int) {
+        Services.shared.getSingleAnime(endpoint: .singleAnime(id: index + 1),
+                                       completion: { [weak self] result in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let result):
+                //send data to new view controller
+                self?.singleDataAPI?(result)
+                print("single data complided")
             }
         })
     }
