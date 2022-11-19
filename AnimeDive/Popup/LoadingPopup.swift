@@ -11,7 +11,6 @@ import UIKit
 class LoadingPopup: UIView {
     
     static let shared = LoadingPopup()
-    
     var popupPresented: ((Int) -> Void)?
     
     func configure() {
