@@ -12,6 +12,3 @@ extension URL {
         URL(string:"https://kitsu.io/api/edge/\(endpoint)")!
     }
 }
-
-
-

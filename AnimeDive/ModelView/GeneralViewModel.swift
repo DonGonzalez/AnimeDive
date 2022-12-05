@@ -11,4 +11,6 @@ import UIKit
 class GeneralViewModel {
     var messageError: ((MessageErrorType) -> Void)?
     var dataAPI: ((Decodable) -> Void)?
+    var singleDataAPI: ((Decodable) -> Void)?
+    var moreDataAPI: ((Decodable) -> Void)?
 }

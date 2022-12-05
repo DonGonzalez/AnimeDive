@@ -11,13 +11,11 @@ import UIKit
 class AnimeTableView: UITableView {
     
     private let identifier = "TableViewCell"
-    var data: Anime!
+    var data: Anime?
     var imageApi: UIImage?
     
-    init(data: Anime) {
+    init() {
         super.init(frame: .zero, style: .plain)
-        self.data = data
-        self.delegate = self
         self.dataSource = self
         self.register(UINib(nibName: identifier,
                             bundle: nil),
@@ -27,26 +25,34 @@ class AnimeTableView: UITableView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder:aDecoder)
     }
-}
-
-extension AnimeTableView: UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func addData(data: Decodable){
+        self.data = data as? Anime
+        self.reloadData()
+    }
+    
+    func appendData (newData: Anime) {
+        data?.data.append(contentsOf: newData.data)
+        self.reloadData()
     }
 }
 
 extension AnimeTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.data.count
+        return data?.data.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.dequeueReusableCell(withIdentifier: identifier,
                                             for: indexPath) as! TableViewCell
-        cell.config(title: self.data.data[indexPath.row].attributes.canonicalTitle,
-                    numberOfSeason: data.data[indexPath.row].attributes.episodeCount,
-                    imageUrl: URL(string: data.data[indexPath.row].attributes.posterImage.tiny)!)
+        cell.config(title: self.data?.data[indexPath.row].attributes.canonicalTitle ?? "Title missing",
+                    numberOfSeason: data?.data[indexPath.row].attributes.episodeCount ?? 0,
+                    imageUrl: URL(string: (data?.data[indexPath.row].attributes.posterImage.tiny)!)!)
         return cell
     }
 }
+
+
+
+

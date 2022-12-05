@@ -27,6 +27,11 @@ class Services {
         request(endpoint: endpoint.url,
                 completion: completion)
     }
+    func getNextAnime (endpoint: Endpoint,
+                       completion: @ escaping ((Result<Anime, HttpStatusCode>) -> Void)) {
+        request(endpoint: endpoint.url,
+                completion: completion)
+    }
     func getSingleEpisodes (endpoint: Endpoint,
                             completion: @ escaping ((Result<SingleEpisode, HttpStatusCode>) -> Void)) {
         request(endpoint: endpoint.url,
@@ -54,6 +59,9 @@ class Services {
                     catch {
                         completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
                     }
+                    // MARK: Code to test parsing error
+                    //  let result = try! JSONDecoder().decode(T.self, from: data)
+                    //  completion(.success(result))
                 }
             }
             task.resume()
@@ -76,6 +84,8 @@ extension UIImageView {
                 else {
                     self.image = UIImage(systemName: "photo")
                     self.contentMode = .scaleAspectFit
+                    self.translatesAutoresizingMaskIntoConstraints = false
+                    self.widthAnchor.constraint(equalToConstant: 100).isActive = true
                     self.backgroundColor = .white
                     return
                 }

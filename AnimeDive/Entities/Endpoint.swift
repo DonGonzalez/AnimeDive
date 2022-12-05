@@ -10,6 +10,7 @@ import Foundation
 enum Endpoint {
     case allAnime
     case singleAnime (id: Int)
+    case moreAnime (offset: Int)
     case episodes
     case singleEpisodes (id: Int)
     
@@ -19,17 +20,18 @@ enum Endpoint {
             return "anime"
         case .singleAnime(id: let id):
             return "anime/\(id)"
+        case .moreAnime(offset: let offset):
+            return "anime?page[limit]=10&page[offset]=\(offset)"
         case .episodes:
             return "episodes"
         case .singleEpisodes(id: let id):
             return "episodes/\(id)"
         }
     }
-     var url: URL {
+    var url: URL {
         .makeURLWithEndpoint(endpoint: value)
     }
 }
-
 
 // comment
 //To let U know there are to possible approaches, both correct:
