@@ -13,7 +13,7 @@ class LoadingPopup: UIView {
     static let shared = LoadingPopup()
     var popupPresented: ((Int) -> Void)?
     
-    func configure() {
+    private func configure() {
         
         self.addSubview(blurEffectView)
         self.addSubview(popupContainer)
@@ -55,7 +55,7 @@ class LoadingPopup: UIView {
         self.removeFromSuperview()
     }
     
-    let blurEffectView: UIView = {
+    private let blurEffectView: UIView = {
         let blur = UIVisualEffectView()
         blur.alpha = 0.75
         blur.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -63,7 +63,7 @@ class LoadingPopup: UIView {
         return blur
     }()
     
-    let popupContainer: UIView = {
+    private let popupContainer: UIView = {
         let container = UIView()
         container.translatesAutoresizingMaskIntoConstraints = false
         container.layer.cornerRadius = 15
@@ -71,7 +71,7 @@ class LoadingPopup: UIView {
         return container
     }()
     
-    let messageLabel: UILabel = {
+    private let messageLabel: UILabel = {
         let label = UILabel()
         label.text = "Please wait ..."
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,7 @@ class LoadingPopup: UIView {
         return label
     }()
     
-    let loadingIndicator: UIActivityIndicatorView = {
+    private let loadingIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView()
         indicator.translatesAutoresizingMaskIntoConstraints = false
         indicator.hidesWhenStopped = true

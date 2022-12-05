@@ -22,14 +22,14 @@ class DetailAnimeScrollView: UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let animeImage: UIImageView = {
+    private let animeImage: UIImageView = {
         let imageView = UIImageView()
         imageView.frame.size = CGSize(width: 150, height: 200)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
         label.textAlignment = .center
@@ -40,7 +40,7 @@ class DetailAnimeScrollView: UIScrollView {
         return label
     }()
     
-    let createAtLabel: UILabel = {
+    private let createAtLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
         label.isHighlighted = true
@@ -49,7 +49,7 @@ class DetailAnimeScrollView: UIScrollView {
         return label
     }()
     
-    let descriptionLabel: UILabel = {
+    private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
         label.textAlignment = .justified
@@ -59,7 +59,7 @@ class DetailAnimeScrollView: UIScrollView {
         return label
     }()
     
-    let updatedAtLabel: UILabel = {
+    private let updatedAtLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
         label.isHighlighted = true
@@ -68,7 +68,7 @@ class DetailAnimeScrollView: UIScrollView {
         return label
     }()
     
-    let episodeLabel: UILabel = {
+    private let episodeLabel: UILabel = {
         let label = UILabel()
         label.clipsToBounds = true
         label.isHighlighted = true
@@ -99,6 +99,7 @@ class DetailAnimeScrollView: UIScrollView {
     private func config() {
         titleLabel.text = data?.data.attributes.canonicalTitle
         self.addSubview(titleLabel)
+        // this !! to discuss with my mentor
         animeImage.downloaded(from: URL(string: (data?.data.attributes.posterImage.tiny)!)!)
         self.addSubview(animeImage)
         self.addSubview(textStackView)

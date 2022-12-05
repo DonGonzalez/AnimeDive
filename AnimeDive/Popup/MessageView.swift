@@ -22,9 +22,9 @@ class MessageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        // titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .systemFont(ofSize: 20)
         titleLabel.isHighlighted = true
         titleLabel.textColor = .black
@@ -34,25 +34,27 @@ class MessageView: UIView {
         return titleLabel
     }()
     
-    let messageLabel: UILabel = {
+    private let messageLabel: UILabel = {
         let messageLabel = UILabel()
         messageLabel.translatesAutoresizingMaskIntoConstraints = false
-        messageLabel.font = .systemFont(ofSize: 15)
+        messageLabel.font = .systemFont(ofSize:15)
         messageLabel.isHighlighted = false
         messageLabel.textColor = .black
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
+        messageLabel.adjustsFontSizeToFitWidth = true
         messageLabel.baselineAdjustment = .alignCenters
+        messageLabel.lineBreakMode = .byWordWrapping
         return messageLabel
     }()
     
-    lazy var stackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.layer.cornerRadius = 8
         stackView.spacing = 1
         stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fillProportionally
+        stackView.alignment = .center
+        //  stackView.distribution = .fillEqually
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(messageLabel)
         return stackView
@@ -69,6 +71,9 @@ class MessageView: UIView {
             stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             stackView.leftAnchor.constraint(equalTo: self.leftAnchor),
             stackView.rightAnchor.constraint(equalTo: self.rightAnchor)
+        ])
+        NSLayoutConstraint.activate([
+            messageLabel.widthAnchor.constraint(equalTo: self.widthAnchor)
         ])
     }
 }

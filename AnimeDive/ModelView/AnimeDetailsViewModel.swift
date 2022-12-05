@@ -24,7 +24,6 @@ class AnimeDetailsViewModel {
 extension AnimeDetailsViewModel {
     
 }
-
 //Mark: Router
 //router - navigation between screen, show models
 extension AnimeDetailsViewModel {

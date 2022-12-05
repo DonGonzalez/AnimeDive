@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-//view model - logic
+//MARK: Logic
 class AnimeViewModel: GeneralViewModel {
     
     let navigator: UINavigationController
@@ -16,12 +16,12 @@ class AnimeViewModel: GeneralViewModel {
         self.navigator = navigator
     }
 }
-//Mark: Interactor
+//MARK: Interactor
 //interactor - API handler
 extension AnimeViewModel {
     
-    func getDataFromBeckend () {
-        Services.shared.getAnime(endpoint: .allAnime, completion: { [weak self] result in
+    func getDataFromBeckend (element: Int) {
+        Services.shared.getAnime(endpoint: .moreAnime(offset: element), completion: { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
@@ -34,12 +34,28 @@ extension AnimeViewModel {
         })
     }
     
+    func getAdditionalDataFromBeckend(offset: Int) {
+        Services.shared.getNextAnime(endpoint: .moreAnime(offset: offset), completion: { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    self?.messageError?(.failure(error.description))
+                    print(error)
+                case .success(let result):
+                    print(result)
+                    self?.moreDataAPI?(result)
+                }
+            }
+        })
+    }
+    
     func getSingleData (index: Int) {
         Services.shared.getSingleAnime(endpoint: .singleAnime(id: index + 1),
                                        completion: { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
+                self?.messageError?(.failure(error.description))
             case .success(let result):
                 //send data to new view controller
                 self?.singleDataAPI?(result)
@@ -48,7 +64,8 @@ extension AnimeViewModel {
         })
     }
 }
-//Mark: Router
+
+//MARK: Router
 //router - navigation between screen, show models
 extension AnimeViewModel {
     
