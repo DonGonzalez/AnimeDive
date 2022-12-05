@@ -62,7 +62,7 @@ class AnimeViewController: UIViewController, UINavigationControllerDelegate {
                 Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                     LoadingPopup.shared.removeFromSuperview()
                     AnimeDetailsViewModel.pushIn(navigator: self.viewModel!.navigator, data: data as! SingleAnime)
-                    self.view.isUserInteractionEnabled = false
+                    self.view.isUserInteractionEnabled = true
                 }
             }
         }
@@ -81,6 +81,7 @@ extension AnimeViewController: UITableViewDelegate, UIWindowSceneDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Loading popup start")
+        self.view.isUserInteractionEnabled = false
         let applicationDelegate = UIApplication.shared.connectedScenes.first!.delegate as! SceneDelegate
         applicationDelegate.window!.rootViewController?.view.addSubview(LoadingPopup.shared.createLoadingPopup(view: self, index: indexPath.row))
     }
