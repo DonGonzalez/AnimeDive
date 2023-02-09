@@ -15,10 +15,17 @@ class PopupAlert: NSObject {
     func createAlert(view: UIViewController, title: String, errorData: MessageErrorType) {
         let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
         alert.isSpringLoaded = true
+        alert.modalTransitionStyle = .coverVertical
         alert.view?.layer.cornerRadius = 8
         alert.view.backgroundColor = .clear
+    
+      //  if (UIDevice.current.userInterfaceIdiom == .pad) {
+      //      alert.preferredStyle = .alert
+      //  }
+        
         // i need fix dimantion of UIAlert, constant value is not optimal
         alert.view.widthAnchor.constraint(equalToConstant: 304).isActive = true
+        alert.view.heightAnchor.constraint(equalToConstant: 60).isActive = true
         // Create custom MessageView
         let customView = MessageView(errorData: errorData)
         alert.view.addSubview(customView)

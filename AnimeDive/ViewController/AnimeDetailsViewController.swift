@@ -17,11 +17,10 @@ class AnimeDetailsViewController: UIViewController, UINavigationControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         self.scrollViewConfig()
     }
     
-    func scrollViewConfig() {
+    private func scrollViewConfig() {
         let scrollView = DetailAnimeScrollView(data: viewModel!.data)
         scrollView.contentSize = self.view.bounds.size
         self.view.addSubview(scrollView)

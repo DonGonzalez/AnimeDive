@@ -16,12 +16,30 @@ class AnimeViewModel: GeneralViewModel {
         self.navigator = navigator
     }
 }
+
 //MARK: Interactor
 //interactor - API handler
 extension AnimeViewModel {
     
-    func getDataFromBeckend (element: Int) {
-        Services.shared.getAnime(endpoint: .moreAnime(offset: element), completion: { [weak self] result in
+    func getSeartchedDataFromBeckend(seartchText: String, sort: String, filter: String){
+        print(seartchText)
+        Services.shared.getAnime(endpoint: .searchAnime(searchText: seartchText, sort: sort, filter: filter.description), completion: { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure(let error):
+                    self?.messageError?(.failure(error.description))
+                case .success(let result):
+                    self?.searchDataAPI?(result)
+                    self?.messageError?(.success("Fetch complited"))
+                    if result.data.count == 0 {
+                    }
+                }
+            }
+        })
+    }
+    
+    func getDataFromBeckend (element: Int, sort: String, filter: String, search: String) {
+        Services.shared.getAnime(endpoint: .moreAnime(offset: element, sort: sort, filter: filter.description ,search: search), completion: { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
@@ -34,15 +52,14 @@ extension AnimeViewModel {
         })
     }
     
-    func getAdditionalDataFromBeckend(offset: Int) {
-        Services.shared.getNextAnime(endpoint: .moreAnime(offset: offset), completion: { [weak self] result in
+    func getAdditionalDataFromBeckend(offset: Int, sort: String, filter: String, search: String) {
+        Services.shared.getNextAnime(endpoint: .moreAnime(offset: offset, sort: sort, filter: filter, search: search), completion: { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .failure(let error):
                     self?.messageError?(.failure(error.description))
                     print(error)
                 case .success(let result):
-                    print(result)
                     self?.moreDataAPI?(result)
                 }
             }
@@ -54,12 +71,10 @@ extension AnimeViewModel {
                                        completion: { [weak self] result in
             switch result {
             case .failure(let error):
-                print(error)
                 self?.messageError?(.failure(error.description))
             case .success(let result):
                 //send data to new view controller
                 self?.singleDataAPI?(result)
-                print("single data complided")
             }
         })
     }
@@ -79,4 +94,32 @@ extension AnimeViewModel {
         navigator.setViewControllers([vc], animated: false)
         return navigator
     }
+    
+    func createModalViewController(modalType: ModalViewController.UserFilterOption, sortSelect: [ModalViewController.SortType], filterSelect: ModalViewController.FilterType) -> UIViewController {
+        
+        let modalVC = ModalViewController(modalType: modalType, sortSelect: sortSelect, filterSelect: filterSelect)
+        modalVC.title = ("\(modalType.self)")
+        modalVC.modalTransitionStyle = .flipHorizontal
+        modalVC.modalPresentationStyle = .custom
+        modalVC.view.backgroundColor = .white
+        modalVC.view.layer.cornerRadius = 8
+        modalVC.sortDelegate = self
+        modalVC.filterDelegate = self
+        return modalVC
+    }
 }
+
+extension AnimeViewModel: SaveSortValueProtocol{
+    func saveSortValue(value: [ModalViewController.SortType]) {
+        self.sortValue?(value)
+    }
+}
+
+extension AnimeViewModel: SaveFilterValueProtocol{
+    func saveFilterValue(value: ModalViewController.FilterType) {
+        self.filterValue?(value)
+    }
+}
+
+
+

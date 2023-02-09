@@ -55,6 +55,7 @@ class Services {
                     do {
                         let result = try JSONDecoder().decode(T.self, from: data)
                         completion(.success(result))
+                        
                     }
                     catch {
                         completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
@@ -96,7 +97,7 @@ extension UIImageView {
     }
 }
 
-// Data structure
+// MARK: Data structure
 /*
  {"data":
  [{"id":"1",
