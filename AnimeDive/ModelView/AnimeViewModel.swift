@@ -10,6 +10,13 @@ import UIKit
 
 //MARK: Logic
 class AnimeViewModel: GeneralViewModel {
+   
+    // Data from ModelVC
+    var selectedFilterMemory = ""
+    var selectedSortMemory = ""
+    var selectedSearchMemory = ""
+    var sortDataToSend: [ModalViewController.SortType] = []
+    var filterDataToSend: ModalViewController.FilterType = .emptyEnum
     
     let navigator: UINavigationController
     init (navigator: UINavigationController) {
@@ -21,26 +28,9 @@ class AnimeViewModel: GeneralViewModel {
 //interactor - API handler
 extension AnimeViewModel {
     
-    func getSeartchedDataFromBeckend(seartchText: String, sort: String, filter: String){
-        print(seartchText)
-        Services.shared.getAnime(endpoint: .searchAnime(searchText: seartchText, sort: sort, filter: filter.description), completion: { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .failure(let error):
-                    self?.messageError?(.failure(error.description))
-                case .success(let result):
-                    self?.searchDataAPI?(result)
-                    self?.messageError?(.success("Fetch complited"))
-                    if result.data.count == 0 {
-                    }
-                }
-            }
-        })
-    }
-    
-    func getDataFromBeckend (element: Int, sort: String, filter: String, search: String) {
-        Services.shared.getAnime(endpoint: .moreAnime(offset: element, sort: sort, filter: filter.description ,search: search), completion: { [weak self] result in
-            DispatchQueue.main.async {
+    func getDataFromAnime(offset: Int, sort: String, filter: String, search: String) {
+        Services.shared.getAnime(endpoint: .moreAnime(offset: offset, sort: sort, filter: filter ,search: search), completion: { [weak self] result in
+            DispatchQueue.main.async { [self] in
                 switch result {
                 case .failure(let error):
                     self?.messageError?(.failure(error.description))
@@ -52,21 +42,20 @@ extension AnimeViewModel {
         })
     }
     
-    func getAdditionalDataFromBeckend(offset: Int, sort: String, filter: String, search: String) {
-        Services.shared.getNextAnime(endpoint: .moreAnime(offset: offset, sort: sort, filter: filter, search: search), completion: { [weak self] result in
-            DispatchQueue.main.async {
+    func getMoreDataFromAnime(offset: Int, sort: String, filter: String, search: String) {
+        Services.shared.getAnime(endpoint: .moreAnime(offset: offset, sort: sort, filter: filter ,search: search), completion: { [weak self] result in
+            DispatchQueue.main.async { [self] in
                 switch result {
                 case .failure(let error):
                     self?.messageError?(.failure(error.description))
-                    print(error)
                 case .success(let result):
-                    self?.moreDataAPI?(result)
+                    self?.additionalDataAPI?(result)
                 }
             }
         })
     }
     
-    func getSingleData (index: Int) {
+    func getSingleDataFromAnime (index: Int) {
         Services.shared.getSingleAnime(endpoint: .singleAnime(id: index + 1),
                                        completion: { [weak self] result in
             switch result {
@@ -87,6 +76,7 @@ extension AnimeViewModel {
     static func create() -> UIViewController {
         let navigator = UINavigationController()
         let viewModel = AnimeViewModel(navigator: navigator)
+        viewModel.getDefaultAnime()
         let vc = AnimeViewController()
         vc.assignDependencies(viewModel: viewModel)
         vc.title = "Anime"
@@ -95,10 +85,14 @@ extension AnimeViewModel {
         return navigator
     }
     
-    func createModalViewController(modalType: ModalViewController.UserFilterOption, sortSelect: [ModalViewController.SortType], filterSelect: ModalViewController.FilterType) -> UIViewController {
+    func createDetailsViewController(data: SingleAnime) {
+        AnimeDetailsViewModel.pushIn(navigator: navigator, data: data )
+    }
+    
+    func createUserFiltringMenu(modalType: ModalViewController.UserFilterOption, sortSelect: [ModalViewController.SortType], filterSelect: ModalViewController.FilterType) -> UIViewController {
         
         let modalVC = ModalViewController(modalType: modalType, sortSelect: sortSelect, filterSelect: filterSelect)
-        modalVC.title = ("\(modalType.self)")
+        
         modalVC.modalTransitionStyle = .flipHorizontal
         modalVC.modalPresentationStyle = .custom
         modalVC.view.backgroundColor = .white
@@ -107,19 +101,67 @@ extension AnimeViewModel {
         modalVC.filterDelegate = self
         return modalVC
     }
+  
+        
+    
+    func singleAnimeData(index: Int){
+      getSingleDataFromAnime(index: index)
+    }
+    
+    func scrollAnimeData(offset: Int) {
+        getMoreDataFromAnime(offset: offset, sort: self.selectedSortMemory, filter: self.selectedFilterMemory, search: self.selectedSearchMemory)
+    }
+    
+    func filterAnimeData(filter:ModalViewController.FilterType){
+          self.filterDataToSend = filter
+        self.selectedFilterMemory = filter.filterValue
+        getDataFromAnime(offset: 0, sort: self.selectedSortMemory, filter: self.selectedFilterMemory, search: self.selectedSearchMemory)
+    }
+    
+    func sortAnimeData(sort: [ModalViewController.SortType]){
+        var sortContener: [String] = []
+        var i = 0
+        while i <= sort.count - 1 {
+            sortContener.append(sort[i].sortValue)
+            i += 1
+        }
+        self.sortDataToSend = sort
+        if sortContener != []{
+            self.selectedSortMemory = ("&sort=\(sortContener.joined(separator: ","))")
+            getDataFromAnime(offset: 0, sort: self.selectedSortMemory , filter: self.selectedFilterMemory, search: self.selectedSearchMemory)
+        } else {
+            self.selectedSortMemory = sortContener.joined(separator: ",")
+            getDataFromAnime(offset: 0, sort: self.selectedSortMemory , filter: self.selectedFilterMemory, search: self.selectedSearchMemory)
+        }
+       
+    }
+    
+    func searchAnime(convertedText: String){
+        
+        self.selectedSearchMemory = convertedText
+        if (14...17).contains(convertedText.count) {
+            // standard request
+            getDataFromAnime(offset: 0, sort: selectedSortMemory,filter: selectedFilterMemory, search: "")
+        } else {
+            // search request
+            getDataFromAnime(offset: 0, sort: selectedSortMemory, filter: selectedFilterMemory, search: selectedSearchMemory)
+        }
+    }
+    
+    func getDefaultAnime(){
+        getDataFromAnime(offset: 0, sort: selectedSortMemory, filter: selectedFilterMemory, search: selectedSearchMemory)
+    }
 }
 
 extension AnimeViewModel: SaveSortValueProtocol{
     func saveSortValue(value: [ModalViewController.SortType]) {
-        self.sortValue?(value)
+        sortAnimeData(sort: value)
     }
 }
 
 extension AnimeViewModel: SaveFilterValueProtocol{
     func saveFilterValue(value: ModalViewController.FilterType) {
-        self.filterValue?(value)
+        filterAnimeData(filter: value)
     }
 }
-
-
 

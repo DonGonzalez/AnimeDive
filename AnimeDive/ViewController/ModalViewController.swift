@@ -55,13 +55,13 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
         var filterValue: String {
             switch self {
             case .winter:
-                return "/anime?filter[season]=winter"
+                return "&filter[season]=winter"
             case .spring:
-                return "/anime?filter[season]=spring"
+                return "&filter[season]=spring"
             case .summer:
-                return "/anime?filter[season]=summer"
+                return "&filter[season]=summer"
             case.fall:
-                return "/anime?filter[season]=fall"
+                return "&filter[season]=fall"
             case .emptyEnum:
                 return ""
             }
@@ -85,17 +85,17 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             case .Favorites_Count:
                 return "Favorites Count"
             case .Episode_Count:
-                return "Episore Count"
+                return "Episode Count"
             }
         }
         var sortValue: String {
             switch self {
             case .User_Count:
-                return "usersCount"
+                return "userCount"
             case .Favorites_Count:
                 return "favoritesCount"
             case .Episode_Count:
-                return "episodesCount"
+                return "episodeCount"
             }
         }
         
@@ -103,11 +103,11 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             return SortType.allCases.first { $0.title == title} ?? .User_Count
         }
     }
-// MARK: Variable
+    // MARK: Variable
     // var use to configure ModalVC
     var modalType: UserFilterOption!
     // vars with data from AnimeMV
-    var sortSelect: [ModalViewController.SortType]?
+    //var sortSelect: [ModalViewController.SortType]?
     var filterSelect: ModalViewController.FilterType?
     // use to configure ModalVC
     let customTransitioningDelegate = TransitioningDelegate()
@@ -115,7 +115,7 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
     var selectedFilter: FilterType?
     var sortDelegate: SaveSortValueProtocol?
     var filterDelegate: SaveFilterValueProtocol?
-    // save inf. about selected boxButton
+    // save info. about selected boxButton
     var boxSelectedArray: [ModalViewController.SortType]? = []
     
     // MARK: Common content for sort and filter VM
@@ -141,7 +141,7 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
         return label
     }()
     
-   
+    
     private func configureModalVC () {
         self.view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
@@ -182,17 +182,17 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
         super.init(nibName: nil, bundle: nil)
         self.modalType =  modalType
         self.filterSelect = filterSelect
-        self.sortSelect = sortSelect
+        self.boxSelectedArray = sortSelect
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-   private func setup(modalType: UserFilterOption) {
+    private func setup(modalType: UserFilterOption) {
         
-        titleLabel.text = "\(modalType.title)"
-    
+        titleLabel.text = modalType.title
+        
         //MARK: Create views for Sort option
         if modalType == .sort {
             self.createBoxButton(numberOfButtons: 3, view: self)
@@ -204,7 +204,7 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
     }
     
     //MARK: RadioButton
-   private func createRadioButton (numberOfButtons: Int, view: UIViewController) {
+    private func createRadioButton (numberOfButtons: Int, view: UIViewController) {
         
         lazy var radioScrollView: UIScrollView = {
             let scroll = UIScrollView()
@@ -255,10 +255,10 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
                         radioButton.setImage(UIImage(systemName: "circle"), for: .normal)
                     }
                 }
-                // if user dont chose filter, button will be no active
+                // if user dont chose filter, button will be inactive
                 print(chosenFilter)
             }
-            ))
+                                                                             ))
             radioButton.translatesAutoresizingMaskIntoConstraints = false
             // Configure image, use information from AnimeVC
             if radioButton.titleLabel?.text ==  self.filterSelect?.title {
@@ -302,7 +302,7 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
     }
     
     // MARK: Configuration BoxButton
-     private func createBoxButton (numberOfButtons: Int, view: UIViewController) {
+    private func createBoxButton (numberOfButtons: Int, view: UIViewController) {
         
         lazy var radioScrollView: UIScrollView = {
             let scroll = UIScrollView()
@@ -336,51 +336,53 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             container.heightAnchor.constraint(equalTo: radioScrollView.heightAnchor)
         ])
         
-            var boxArray: [UIButton] = []
-            for i in SortType.allCases {
-                let boxButton = UIButton(type: .custom, primaryAction: UIAction(title: i.title, handler: { action in
-                    let chosenSort = SortType.type(title: action.title)
-                    print("Button tapped!")
-                    // MARK: BoxButton logic
-                    for boxButton in boxArray {
-                        if boxButton.titleLabel?.text == action.title && boxButton.isSelected == false {
-                            boxButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-                            boxButton.isSelected = true
-                            self.boxSelectedArray?.append(chosenSort.self)
-                        } else if boxButton.titleLabel?.text == action.title && boxButton.isSelected == true   {
-                            boxButton.setImage(UIImage(systemName: "circle"), for: .normal)
-                            boxButton.isSelected = false
-                            self.boxSelectedArray?.removeAll {$0.self == chosenSort}
-                        }
+        var boxArray: [UIButton] = []
+        for i in SortType.allCases {
+            let boxButton = UIButton(type: .custom, primaryAction: UIAction(title: i.title, handler: { action in
+                let chosenSort = SortType.type(title: action.title)
+                print("Button tapped!")
+                // MARK: BoxButton logic
+                for boxButton in boxArray {
+                    if boxButton.titleLabel?.text == action.title && boxButton.isSelected == false {
+                        boxButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+                        boxButton.isSelected = true
+                        self.boxSelectedArray?.append(chosenSort)
+                    } else if boxButton.titleLabel?.text == action.title && boxButton.isSelected == true   {
+                        boxButton.setImage(UIImage(systemName: "circle"), for: .normal)
+                        boxButton.isSelected = false
+                        self.boxSelectedArray?.removeAll {$0.self == chosenSort}
                     }
                 }
-                 ))
-                boxButton.translatesAutoresizingMaskIntoConstraints = false
-                // Configure image, use information from AnimeVC
-                if self.sortSelect?.contains(i) == true{
-                    boxButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
-                    boxButton.isSelected = true
-                } else {
-                    boxButton.setImage(UIImage(systemName: "circle"), for: .normal)
-                }
-                // I can't move image to left and set padding
-                boxButton.setTitleColor(.black, for: .normal)
-                boxButton.tintColor = .black
-                // Configuration doesn't work
-                boxButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 0)
-                boxButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
-                boxButton.contentHorizontalAlignment = .leading
-                boxArray.append(boxButton)
-                container.addArrangedSubview(boxButton)
-                NSLayoutConstraint.activate([
-                    boxButton.widthAnchor.constraint(equalTo: container.widthAnchor),
-                    boxButton.heightAnchor.constraint(equalToConstant: 50)
-                ])
+                print(chosenSort)
+            }
+                                                                           ))
+            boxButton.translatesAutoresizingMaskIntoConstraints = false
+            // Configure image, use information from AnimeVC
+            if self.boxSelectedArray?.contains(i) == true{
+                boxButton.setImage(UIImage(systemName: "circle.fill"), for: .normal)
+                boxButton.isSelected = true
+            } else {
+                boxButton.setImage(UIImage(systemName: "circle"), for: .normal)
+            }
+            // I can't move image to left and set padding
+            boxButton.setTitleColor(.black, for: .normal)
+            boxButton.tintColor = .black
+            // Configuration doesn't work
+            boxButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 0)
+            boxButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+            boxButton.contentHorizontalAlignment = .leading
+            boxArray.append(boxButton)
+            container.addArrangedSubview(boxButton)
+            NSLayoutConstraint.activate([
+                boxButton.widthAnchor.constraint(equalTo: container.widthAnchor),
+                boxButton.heightAnchor.constraint(equalToConstant: 50)
+            ])
         }
         
         let clearButton = UIButton(type: .system, primaryAction: UIAction(handler: { action in
             print("clickclear")
             self.boxSelectedArray?.removeAll()
+            
             
         }))
         clearButton.setTitle("Clear", for: .normal)
@@ -474,4 +476,5 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
         }
     }
 }
+
 

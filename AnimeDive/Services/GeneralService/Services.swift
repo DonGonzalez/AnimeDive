@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+
+// znaki specjalne
+
+
 class Services {
     
     static let shared = Services()
@@ -17,29 +21,16 @@ class Services {
         request(endpoint:endpoint.url,
                 completion: completion)
     }
-    func getEpisodes (endpoint: Endpoint,
-                      completion: @ escaping ((Result<Episodes, HttpStatusCode>) -> Void)) {
-        request(endpoint: endpoint.url,
-                completion: completion)
-    }
+ 
     func getSingleAnime (endpoint: Endpoint,
                          completion: @ escaping ((Result<SingleAnime, HttpStatusCode>) -> Void)) {
-        request(endpoint: endpoint.url,
-                completion: completion)
-    }
-    func getNextAnime (endpoint: Endpoint,
-                       completion: @ escaping ((Result<Anime, HttpStatusCode>) -> Void)) {
-        request(endpoint: endpoint.url,
-                completion: completion)
-    }
-    func getSingleEpisodes (endpoint: Endpoint,
-                            completion: @ escaping ((Result<SingleEpisode, HttpStatusCode>) -> Void)) {
         request(endpoint: endpoint.url,
                 completion: completion)
     }
     
     private func request <T: Decodable> (endpoint: URL?, completion: @ escaping (Result<T, HttpStatusCode>) -> Void) {
         DispatchQueue.main.async {
+            print(endpoint!)
             guard let url = endpoint else {
                 completion(.failure(HttpStatusCode.badURL))
                 return
@@ -55,7 +46,6 @@ class Services {
                     do {
                         let result = try JSONDecoder().decode(T.self, from: data)
                         completion(.success(result))
-                        
                     }
                     catch {
                         completion(.failure(HttpStatusCode.parsing(error as? DecodingError)))
@@ -69,6 +59,7 @@ class Services {
         }
     }
 }
+
 var imageCache = NSCache <AnyObject, AnyObject> ()
 extension UIImageView {
     

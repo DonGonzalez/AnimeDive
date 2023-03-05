@@ -12,17 +12,17 @@ extension AnimeViewController {
     
      func createNavigationBarButtons() {
         
-        let sortBT = UIBarButtonItem(barButtonSystemItem: .search,
+        let sortButton = UIBarButtonItem(barButtonSystemItem: .search,
                                      target: self,
                                      action: #selector(sortActionBT))
         
-        let filterBT = UIBarButtonItem(image: UIImage(named: "FilterIcon"),
+        let filterButton = UIBarButtonItem(image: UIImage(named: "FilterIcon"),
                                        style: .plain, target: self,
                                        action: #selector(filterActionBT))
         
-        sortBT.customView?.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        sortButton.customView?.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         
-        navigationItem.setRightBarButtonItems([sortBT, filterBT], animated: true)
+        navigationItem.setRightBarButtonItems([sortButton, filterButton], animated: true)
     }
     
     @objc private func filterActionBT () {
@@ -40,11 +40,11 @@ extension AnimeViewController: ModalViewControllerOptionDelegate{
     func toolBarItemDidTap(type: ModalViewController.UserFilterOption) {
         
         if type == .sort {
-            let modalCV = self.viewModel?.createModalViewController(modalType: type, sortSelect: sortDataToSend, filterSelect: filterDataToSend)
+            let modalCV = self.viewModel?.createUserFiltringMenu(modalType: type, sortSelect: self.viewModel?.sortDataToSend ?? [], filterSelect: self.viewModel?.filterDataToSend ?? .emptyEnum)
             self.present(modalCV!, animated: true)
         }
         if type == .filter {
-            let modalCV = self.viewModel?.createModalViewController(modalType: type, sortSelect: sortDataToSend, filterSelect: filterDataToSend )
+            let modalCV = self.viewModel?.createUserFiltringMenu(modalType: type, sortSelect: self.viewModel?.sortDataToSend ?? [], filterSelect: self.viewModel?.filterDataToSend ?? .emptyEnum )
             self.present(modalCV!, animated: true)
         }
     }

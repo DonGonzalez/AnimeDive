@@ -37,6 +37,11 @@ enum Endpoint {
     }
 }
 
+extension Endpoint {
+    
+    
+    
+}
 // comment
 //To let U know there are to possible approaches, both correct:
 //case .mySample(id: let id, data: let data, ...):
