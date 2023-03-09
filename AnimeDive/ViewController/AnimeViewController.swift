@@ -75,7 +75,6 @@ class AnimeViewController: UIViewController {
     private func tableViewConfigure() {
         self.viewModel?.dataAPI = { [weak self]
             dataAPI in
-            print(dataAPI)
             self?.animeTableView.addData(data: dataAPI)
         }
     }
@@ -167,7 +166,6 @@ extension AnimeViewController: UISearchBarDelegate {
         // send searchtext to vc
         viewModel?.searchAnime(convertedText: convertedUserText)
         searchBar.searchTextField.isUserInteractionEnabled = false
-        print("Seartch Button Clicked: \(convertedUserText)")
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -183,6 +181,8 @@ extension String {
     var convertUserText: String {
         let trimSpace = self.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let removeSpace = trimSpace.replacingOccurrences(of: " ", with: "")
-        return removeSpace
+        let chars = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        let stripedText = removeSpace.filter {chars.contains($0) }
+        return stripedText
     }
 }

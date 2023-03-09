@@ -136,7 +136,7 @@ extension AnimeViewModel {
        
     }
     
-    func searchAnime(convertedText: String){
+    func searchAnime(convertedText: String) {
         
         self.selectedSearchMemory = convertedText
         if (14...17).contains(convertedText.count) {
@@ -152,7 +152,6 @@ extension AnimeViewModel {
         getDataFromAnime(offset: 0, sort: selectedSortMemory, filter: selectedFilterMemory, search: selectedSearchMemory)
     }
 }
-
 extension AnimeViewModel: SaveSortValueProtocol{
     func saveSortValue(value: [ModalViewController.SortType]) {
         sortAnimeData(sort: value)

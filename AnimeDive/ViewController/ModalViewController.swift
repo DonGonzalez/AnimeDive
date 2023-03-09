@@ -107,7 +107,6 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
     // var use to configure ModalVC
     var modalType: UserFilterOption!
     // vars with data from AnimeMV
-    //var sortSelect: [ModalViewController.SortType]?
     var filterSelect: ModalViewController.FilterType?
     // use to configure ModalVC
     let customTransitioningDelegate = TransitioningDelegate()
@@ -170,7 +169,6 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             self.boxSelectedArray?.removeAll()
             self.dismiss(animated: true, completion: nil)
         }
-        print("cancel")
     }
     
     override func viewDidLoad() {
@@ -202,6 +200,7 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             self.createRadioButton(numberOfButtons: 3, view: self)
         }
     }
+    
     
     //MARK: RadioButton
     private func createRadioButton (numberOfButtons: Int, view: UIViewController) {
@@ -299,6 +298,8 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             confirmButton.widthAnchor.constraint(equalToConstant: 130),
             confirmButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+        
+        
     }
     
     // MARK: Configuration BoxButton
@@ -379,10 +380,11 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             ])
         }
         
+        
         let clearButton = UIButton(type: .system, primaryAction: UIAction(handler: { action in
             print("clickclear")
             self.boxSelectedArray?.removeAll()
-            
+            restetButtonImage(boxArray)
             
         }))
         clearButton.setTitle("Clear", for: .normal)
@@ -397,11 +399,11 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             clearButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
-        let confirmButton = UIButton(type: .system, primaryAction: UIAction(handler: { [self] action in
+        let confirmButton = UIButton(type: .system, primaryAction: UIAction(handler: { [weak self] action in
             print("click Confirm")
             // Pass information about selected sort to AnimeVC
-            self.sortDelegate?.saveSortValue(value: boxSelectedArray ?? [])
-            self.dismiss(animated: true, completion: nil)
+            self?.sortDelegate?.saveSortValue(value: self?.boxSelectedArray ?? [])
+            self?.dismiss(animated: true, completion: nil)
         }))
         confirmButton.setTitle("Confirm & Exit", for: .normal)
         confirmButton.setTitleColor(.black, for: .normal)
@@ -414,6 +416,21 @@ class ModalViewController: UIViewController, UISearchBarDelegate {
             confirmButton.widthAnchor.constraint(equalToConstant: 130),
             confirmButton.heightAnchor.constraint(equalToConstant: 40)
         ])
+        
+        //Where put this??
+        func restetButtonImage(_ sender: [UIButton]){
+            print(sender)
+            var i = 0
+            while i <= sender.count - 1 {
+                do {
+                    sender[i].setImage(UIImage(systemName: "circle"), for: .normal)
+                    sender[i].isSelected = false
+                    print("resetImage")
+                    print(i)
+                    i += 1
+                }
+            }
+        }
     }
     
     //MARK: ModalVC window settings
