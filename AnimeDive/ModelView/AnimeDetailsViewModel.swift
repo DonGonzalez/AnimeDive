@@ -28,7 +28,8 @@ extension AnimeDetailsViewModel {
 //router - navigation between screen, show models
 extension AnimeDetailsViewModel {
     
-    static func pushIn(navigator: UINavigationController, data: SingleAnime) {
+  
+   static func pushIn(navigator: UINavigationController, data: SingleAnime) {
         
         let viewModel = AnimeDetailsViewModel(navigator: navigator, data: data)
         let vc = AnimeDetailsViewController()

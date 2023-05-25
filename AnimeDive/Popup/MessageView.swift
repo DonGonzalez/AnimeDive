@@ -10,7 +10,7 @@ import UIKit
 
 class MessageView: UIView {
     
-    private var errorData: MessageErrorType!
+    private var errorData: MessageErrorType?
     
     init(errorData: MessageErrorType) {
         self.errorData = errorData
@@ -63,8 +63,8 @@ class MessageView: UIView {
     private func configure() {
         self.layer.cornerRadius = 8
         self.addSubview(stackView)
-        stackView.backgroundColor = errorData.backgroundColor
-        messageLabel.text = errorData.message
+        stackView.backgroundColor = errorData?.backgroundColor
+        messageLabel.text = errorData?.message
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: self.topAnchor),
